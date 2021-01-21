@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require('path')
 const exphbs = require('express-handlebars')
+const morgan = require('morgan')
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.engine('.hbs', exphbs({
 app.set('view engine', '.hbs')
 
 // Middlewares.
+app.use(morgan('dev'))
 app.use(express.json());
 app.use(express.urlencoded({extended: false}))
 
