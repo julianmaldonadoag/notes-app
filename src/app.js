@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const exphbs = require('express-handlebars')
 const morgan = require('morgan')
+const methodOverride = require('method-override')
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.set('view engine', '.hbs')
 app.use(morgan('dev'))
 app.use(express.json());
 app.use(express.urlencoded({extended: false}))
+app.use(methodOverride('_method'))
 
 // Routes.
 app.use(require('./routes/index.routes'))

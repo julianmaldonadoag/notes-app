@@ -27,8 +27,10 @@ notesCtrl.updateNote = (req, res) => {
   res.send(`Update note ${req.params.id}`)
 }
 
-notesCtrl.deleteNote = (req, res) => {
-  res.send(`Delete note ${req.params.id}`)
+notesCtrl.deleteNote = async (req, res) => {
+  await Note.findByIdAndDelete(req.params.id)
+
+  res.redirect('/notes')
 }
 
 module.exports = notesCtrl
