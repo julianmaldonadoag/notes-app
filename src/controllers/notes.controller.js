@@ -7,8 +7,9 @@ notesCtrl.renderNoteForm = (req, res) => {
 
 notesCtrl.createNewNote = async (req, res) => {
   const { title, description } = req.body
-  const newNote = Note({title, description})
+  const newNote = new Note({title, description})
   await newNote.save()
+  req.flash('success_msg', 'Note added successfully')
 
   res.redirect('/notes')
 }
@@ -16,7 +17,7 @@ notesCtrl.createNewNote = async (req, res) => {
 notesCtrl.renderNotes = async (req, res) => {
   const notes = await Note.find().lean()
   
-  res.render('notes/all-notes', {notes})
+  res.render('notes/all-notes', { notes })
 }
 
 notesCtrl.renderEditForm = async(req, res) => {
@@ -28,12 +29,14 @@ notesCtrl.renderEditForm = async(req, res) => {
 notesCtrl.updateNote = async(req, res) => {
   const { title, description } = req.body
   await Note.findByIdAndUpdate(req.params.id, { title, description })
+  req.flash('success_msg', 'Note updated successfully')
 
   res.redirect('/notes')
 }
 
 notesCtrl.deleteNote = async (req, res) => {
   await Note.findByIdAndDelete(req.params.id)
+  req.flash('success_msg', 'Note deleted successfully')
 
   res.redirect('/notes')
 }
