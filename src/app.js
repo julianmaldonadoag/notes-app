@@ -5,8 +5,11 @@ const morgan = require('morgan')
 const methodOverride = require('method-override')
 const flash = require('connect-flash')
 const session = require('express-session')
+const passport = require('passport')
 
+// Initializations.
 const app = express();
+require('./config/passport')
 
 // Settings.
 app.set('port', process.env.PORT || 3000);
@@ -29,11 +32,15 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }))
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash())
 
-// Global variables.
+// 'Global' variables for the view.
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg')
+  res.locals.passport_error = req.flash('error')
+  res.locals.user = req.user || null // Passport user.
   next()
 })
 
