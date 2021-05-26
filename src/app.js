@@ -39,6 +39,7 @@ app.use(flash())
 // 'Global' variables for the view.
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg')
+  res.locals.error_msg = req.flash('error_msg')
   res.locals.passport_error = req.flash('error')
   res.locals.user = req.user || null // Passport user.
   next()

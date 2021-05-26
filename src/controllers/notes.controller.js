@@ -7,7 +7,8 @@ notesCtrl.renderNoteForm = (req, res) => {
 
 notesCtrl.createNewNote = async (req, res) => {
   const { title, description } = req.body
-  const newNote = new Note({title, description})
+  const userId = req.user.id // Data from passport.
+  const newNote = new Note({title, description, userId})
   await newNote.save()
   req.flash('success_msg', 'Note added successfully')
 
@@ -15,13 +16,19 @@ notesCtrl.createNewNote = async (req, res) => {
 }
 
 notesCtrl.renderNotes = async (req, res) => {
-  const notes = await Note.find().lean()
+  const userId = req.user.id // Data from passport.
+  const notes = await Note.find({userId}).lean().sort({createdAt: 'desc'})
   
   res.render('notes/all-notes', { notes })
 }
 
 notesCtrl.renderEditForm = async(req, res) => {
   const note = await Note.findById(req.params.id).lean()
+
+  if (note.userId != req.user.id) {
+    req.flash('error_msg', 'Unauthorized')
+    return res.redirect('/notes')
+  }
 
   res.render('notes/edit-note', { note })
 }
