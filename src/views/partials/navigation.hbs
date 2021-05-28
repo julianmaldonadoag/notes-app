@@ -25,7 +25,16 @@
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/notes">All notes</a>
                 <a class="dropdown-item" href="/notes/add">Add note</a>
-                <div class="dropdown-divider"></div>
+              </div>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{#each user}}
+                  {{name}}
+                {{/each}}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/users/logout">Logout</a>
               </div>
             </li>

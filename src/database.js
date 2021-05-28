@@ -10,3 +10,5 @@ mongoose.connect(MONGODB_URI, {
 })
   .then(db => console.log('Database is connected'))
   .catch(err => console.log(err))
+
+mongoose.set('useCreateIndex', true);
