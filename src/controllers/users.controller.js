@@ -10,38 +10,40 @@ usersCtrl.signUp = async (req, res) => {
   const errors = []
 
   const { name, email, password, confirmPassword } = req.body
+  let newUser = { name, email, password, confirmPassword }
 
-  if (password !== confirmPassword) errors.push({text: 'Passwords do not match'})
-  if (password.length < 6) errors.push({text: 'Password must have at least 6 characters'})
-
-  if (errors.length > 0) {
-    res.render('users/signup', {
-      errors,
-      name,
-      email,
-      password,
-      confirmPassword
-    })
+  if (!name) errors.push({text: 'Empty name field'})
+  if (!email) errors.push({text: 'Empty email field'})
+  if (!password) {
+    errors.push({text: 'Empty password field'})
   } else {
-
-    const emailUser = await User.findOne({email: email})
-    if (emailUser){
-      errors.push({text: 'The email is already in use'})
-      res.render('users/signup', {
-        errors,
-        name,
-        email,
-        password,
-        confirmPassword
-      })
-    } else {
-      const newUser = new User({name, email, password})
-      newUser.password = await newUser.encryptPassword(password)
-      req.flash('success_msg', 'Your account was created successfully')
-      await newUser.save()
-      res.redirect('/users/login')
-    }
+    if (password.length < 6)
+      errors.push({text: 'Password must have at least 6 characters'})
+    if (password !== confirmPassword)
+      errors.push({text: 'Passwords do not match'})
   }
+  
+  if (errors.length > 0) {
+    return res.render('users/signup', {
+      errors,
+      newUser
+    })
+  }
+
+  const emailUser = await User.findOne({email: email})
+  if (emailUser){
+    errors.push({text: 'The email is already linked to an account.'})
+    return res.render('users/signup', {
+      errors,
+      newUser
+    })
+  }
+
+  newUser = new User({name, email, password})
+  newUser.password = await newUser.encryptPassword(password)
+  req.flash('success_msg', 'Your account was created successfully')
+  await newUser.save()
+  res.redirect('/users/login')
 }
 
 usersCtrl.renderLoginForm = (req, res) => {

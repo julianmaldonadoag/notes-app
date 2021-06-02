@@ -7,6 +7,20 @@ notesCtrl.renderNoteForm = (req, res) => {
 
 notesCtrl.createNewNote = async (req, res) => {
   const { title, description } = req.body
+  const note = { title, description }
+
+  // Validation.
+  const errors = []
+
+  if (!title) errors.push({text: 'Empty title field'})
+  if (!description) errors.push({text: 'Empty description field'})
+  if (errors.length > 0) {
+    return res.render('notes/new-note', {
+      errors,
+      note
+    })
+  } 
+
   const userId = req.user.id // Data from passport.
   const newNote = new Note({title, description, userId})
   await newNote.save()
@@ -35,6 +49,24 @@ notesCtrl.renderEditForm = async(req, res) => {
 
 notesCtrl.updateNote = async(req, res) => {
   const { title, description } = req.body
+  
+  // Validation.
+  const errors = []
+  const note = {
+    _id: req.params.id,
+    title,
+    description
+  }
+  
+  if (!title) errors.push({text: 'Empty title field'})
+  if (!description) errors.push({text: 'Empty description field'})
+  if (errors.length > 0) {
+    return res.render('notes/edit-note', {
+      errors,
+      note
+    })
+  } 
+
   await Note.findByIdAndUpdate(req.params.id, { title, description })
   req.flash('success_msg', 'Note updated successfully')
 

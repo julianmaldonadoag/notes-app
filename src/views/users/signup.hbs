@@ -7,16 +7,16 @@
       <div class="card-body">
         <form action="/users/signup" method="POST">
           <div class="form-group">
-            <input type="text" class="form-control" name="name" placeholder="Name" value="{{name}}">
+            <input type="text" class="form-control" name="name" placeholder="Name" value="{{newUser.name}}">
           </div>
           <div class="form-group">
-            <input type="email" class="form-control" name="email" placeholder="Email" value="{{email}}">
+            <input type="email" class="form-control" name="email" placeholder="Email" value="{{newUser.email}}">
           </div>
           <div class="form-group">
-            <input type="password" class="form-control" name="password" placeholder="Password" value="{{password}}">
+            <input type="password" class="form-control" name="password" placeholder="Password" value="{{newUser.password}}">
           </div>
           <div class="form-group">
-            <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm Password" value="{{confirmPassword}}">
+            <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm Password" value="{{newUser.confirmPassword}}">
           </div>
           <input type="submit" class="btn btn-primary btn-block" value="SignUp">
         </form>
