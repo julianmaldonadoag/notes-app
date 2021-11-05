@@ -1,7 +1,6 @@
 const express = require('express')
 const path = require('path')
 const exphbs = require('express-handlebars')
-const morgan = require('morgan')
 const methodOverride = require('method-override')
 const flash = require('connect-flash')
 const session = require('express-session')
@@ -23,7 +22,10 @@ app.engine('.hbs', exphbs({
 app.set('view engine', '.hbs')
 
 // Middlewares.
-app.use(morgan('dev'))
+if (process.env.NODE_ENV === 'development') {
+  const morgan = require('morgan')
+  app.use(morgan('dev'))
+}
 app.use(express.json());
 app.use(express.urlencoded({extended: false}))
 app.use(methodOverride('_method'))
